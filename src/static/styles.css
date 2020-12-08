@@ -1,0 +1,40 @@
+body, html {
+    margin: 0;
+    background-color: #FFA724;
+    height: 100%;
+    overflow: hidden;
+}
+h1 {
+    text-align: center;
+    position: relative;
+    top: 25%;
+    transform: translateY(-50%);
+    font-size: 4vh;
+    font-family: 'Montserrat', sans-serif;
+    user-select: none;
+    color: #404040;
+}
+h4 {
+    text-align: center;
+    position: relative;
+    top: 27%;
+    transform: translateY(-50%);
+    font-size: 2vh;
+    font-family: 'Montserrat', sans-serif;
+    user-select: none;
+    color: #404040;
+}
+.logo {
+    width: 10vh;
+    height: 10vh;
+    padding: 0;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50px);
+    background-image: url('bee-192x192.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: transparent;
+    transition: top 1s ease-out, left 1s ease-out;
+}
