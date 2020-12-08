@@ -8,20 +8,26 @@ import logging.config
 
 from flask import Flask, render_template
 
-import background
+import src.background
 
-logging.config.fileConfig('logging_config.ini')
-
-logger = logging.getLogger(__name__)
-
-server = Flask(__name__)
-background.setupScheduler(server)
+service = Flask(__name__)
 
 
-@server.route("/")
+@service.route("/")
 def home():
     return render_template('index.html')
 
 
+def setup_service():
+    logging.config.fileConfig('logging_config.ini')
+
+    logger = logging.getLogger(__name__)
+
+    src.background.setupScheduler(service)
+
+    return service
+
+
 if __name__ == "__main__":
-    server.run(debug=True, host='0.0.0.0')
+    app = setup_service()
+    app.run(debug=True, host='0.0.0.0')
