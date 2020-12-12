@@ -1,4 +1,6 @@
-def test_index(service, client):
+""" route testing """
+def test_route_root(client):
+    """ test route / """
     res = client.get('/')
     assert res.status_code == 200
     expected = """<!DOCTYPE html>
