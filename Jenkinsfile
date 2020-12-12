@@ -46,6 +46,15 @@ pipeline {
         }
       }
     }
+    stage('Docker Build') {
+      steps {
+        script {
+          sh """
+          docker build . -t gadgetworks/karrots-example-python:0.1.0
+          """
+        }
+      }
+    }
   }
   post {
     failure {
