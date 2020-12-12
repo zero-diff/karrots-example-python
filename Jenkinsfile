@@ -10,7 +10,7 @@ pipeline {
     // contained within your projects repository. This image should include
     // the core runtimes and dependencies required to run the job,
     // for example Python 3.x and NPM.
-    dockerfile { filename 'Dockerfile.build' }
+    docker { image 'python:3.9.1' }
   }
   stages {  // Define the individual processes, or stages, of your CI pipeline
     stage('Checkout') { // Checkout (git clone ...) the projects repository
@@ -22,7 +22,8 @@ pipeline {
       steps {
         script {
           sh """
-          pip install -r requirements.txt
+          pip install -r src/requirements.txt
+          pip install pylint
           """
         }
       }
@@ -51,7 +52,7 @@ pipeline {
       script {
         msg = "Build error for ${env.JOB_NAME} ${env.BUILD_NUMBER} (${env.BUILD_URL})"
 
-        slackSend message: msg, channel: env.SLACK_CHANNEL
+//        slackSend message: msg, channel: env.SLACK_CHANNEL
       }
     }
   }
