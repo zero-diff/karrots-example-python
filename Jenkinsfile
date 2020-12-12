@@ -21,6 +21,8 @@ pipeline {
     stage('Setup') {
       steps {
         script {
+          def dockerHome = tool 'docker'
+          env.PATH = "${dockerHome}/bin:${env.PATH}"
           sh """
           pip install -r src/requirements.txt
           pip install pylint
