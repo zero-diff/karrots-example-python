@@ -1,10 +1,10 @@
 pipeline {
-//  options {
-//    buildDiscarder(logRotator(numToKeepStr: '10')) // Retain history on the last 10 builds
-//    ansiColor('xterm') // Enable colors in terminal
-//    timestamps() // Append timestamps to each line
-//    timeout(time: 20, unit: 'MINUTES') // Set a timeout on the total execution time of the job
-//  }
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '10')) // Retain history on the last 10 builds
+    ansiColor('xterm') // Enable colors in terminal
+    timestamps() // Append timestamps to each line
+    timeout(time: 20, unit: 'MINUTES') // Set a timeout on the total execution time of the job
+  }
   agent {
     // Run this job within a Docker container built using Dockerfile.build
     // contained within your projects repository. This image should include
@@ -12,13 +12,13 @@ pipeline {
     // for example Python 3.x and NPM.
     docker { image 'python:3.9.1' }
   }
-  stages {  // Define the individual processes, or stages, of your CI pipeline
-    stage('Checkout') { // Checkout (git clone ...) the projects repository
+  stages {
+    stage('Checkout') {
       steps {
         checkout scm
       }
     }
-    stage('Setup') { // Install any dependencies you need to perform testing
+    stage('Setup') {
       steps {
         script {
           sh """
@@ -28,7 +28,7 @@ pipeline {
         }
       }
     }
-    stage('Linting') { // Run pylint against your code
+    stage('Linting') {
       steps {
         script {
           sh """
@@ -37,7 +37,7 @@ pipeline {
         }
       }
     }
-    stage('Unit Testing') { // Perform unit testing
+    stage('Unit Testing') {
       steps {
         script {
           sh """
