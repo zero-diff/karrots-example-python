@@ -1,16 +1,13 @@
 pipeline {
   options {
     buildDiscarder(logRotator(numToKeepStr: '10'))
-//    ansiColor('xterm')
     timestamps()
     timeout(time: 10, unit: 'MINUTES')
   }
   agent {
-    // Run this job within a Docker container built using Dockerfile.build
-    // contained within your projects repository. This image should include
-    // the core runtimes and dependencies required to run the job,
-    // for example Python 3.x and NPM.
-    docker { image 'python:3.9.1' }
+    docker {
+      image 'python:3.9.1'
+    }
   }
   stages {
     stage('Checkout') {
@@ -21,8 +18,6 @@ pipeline {
     stage('Setup') {
       steps {
         script {
-          def dockerHome = tool 'docker'
-          env.PATH = "${dockerHome}/bin:${env.PATH}"
           sh """
           pip install -r src/requirements.txt
           pip install pylint
@@ -49,10 +44,12 @@ pipeline {
       }
     }
     stage('Docker Build') {
+      agent none
       steps {
         script {
+          def dockerHome = tool 'docker'
           sh """
-          docker build . -t gadgetworks/karrots-example-python:0.1.0
+          ${dockerHome}/bin/docker build . -t gadgetworks/karrots-example-python:0.1.0
           """
         }
       }
