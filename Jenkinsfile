@@ -5,9 +5,7 @@ pipeline {
     timeout(time: 10, unit: 'MINUTES')
   }
   agent {
-    docker {
-      image 'python:3.9.1'
-    }
+    label 'karrots'
   }
   stages {
     stage('Checkout') {
