@@ -42,7 +42,6 @@ pipeline {
       }
     }
     stage('Docker Build') {
-      agent none
       steps {
         script {
           def dockerHome = tool 'docker'
