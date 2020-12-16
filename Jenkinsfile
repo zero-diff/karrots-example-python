@@ -1,64 +1,72 @@
 pipeline {
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '10'))
-    timestamps()
-    timeout(time: 10, unit: 'MINUTES')
-  }
-  agent {
-    label 'karrots'
-  }
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
+        timeout(time: 10, unit: 'MINUTES')
     }
-    stage('Setup') {
-      steps {
-        script {
-          sh """
-          pip install -r src/requirements.txt
-          pip install pylint
-          """
+    agent {
+        label 'karrots'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
         }
-      }
-    }
-    stage('Linting') {
-      steps {
-        script {
-          sh """
-          pylint **/*.py
-          """
+        stage('Setup') {
+            steps {
+                container('python') {
+                    script {
+                        sh """
+                          pip install -r src/requirements.txt
+                          pip install pylint
+                        """
+                    }
+                }
+            }
         }
-      }
-    }
-    stage('Unit Testing') {
-      steps {
-        script {
-          sh """
-          python -m unittest discover -s tests/unit
-          """
+        stage('Linting') {
+            steps {
+                container('python') {
+                    script {
+                        sh """
+                          pylint **/*.py
+                        """
+                    }
+                }
+            }
         }
-      }
-    }
-    stage('Docker Build') {
-      steps {
-        script {
-          def dockerHome = tool 'docker'
-          sh """
-          ${dockerHome}/bin/docker build . -t gadgetworks/karrots-example-python:0.1.0
-          """
+        stage('Unit Testing') {
+            steps {
+                container('python') {
+                    script {
+                        sh """
+                          python -m unittest discover -s tests/unit
+                        """
+                    }
+                }
+            }
         }
-      }
+        stage('Docker Build') {
+            steps {
+                container('python') {
+                    script {
+                        def dockerHome = tool 'docker'
+                        sh """#!/bin/sh 
+                          ${dockerHome}/bin/docker build . --no-cache --network=host -t gadgetworks/karrots-example-python:0.1.0
+                        """
+                    }
+                }
+            }
+        }
     }
-  }
-  post {
-    failure {
-      script {
-        msg = "Build error for ${env.JOB_NAME} ${env.BUILD_NUMBER} (${env.BUILD_URL})"
+    post {
+        failure {
+            script {
+                msg = "Build error for ${env.JOB_NAME} ${env.BUILD_NUMBER} (${env.BUILD_URL})"
 
 //        slackSend message: msg, channel: env.SLACK_CHANNEL
-      }
+            }
+        }
     }
-  }
 }
