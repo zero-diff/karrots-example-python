@@ -53,7 +53,8 @@ pipeline {
                     script {
                         def dockerHome = tool 'docker'
                         sh """#!/bin/sh 
-                          ${dockerHome}/bin/docker build . --no-cache --network=host -t gadgetworks/karrots-example-python:0.1.0
+                          ${dockerHome}/bin/docker build . --no-cache --network=host -t zerodiff/karrots-example-python:${env.BUILD_ID}
+                          ${dockerHome}/bin/docker push ${env.CONTAINER_REPO}
                         """
                     }
                 }
