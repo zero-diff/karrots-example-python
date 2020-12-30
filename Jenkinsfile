@@ -48,14 +48,16 @@ pipeline {
             }
         }
         stage('Docker Build') {
+            tools {
+                dockerTool 'docker'
+            }
             steps {
                 container('python') {
                     script {
-                        def dockerHome = tool 'docker'
-                        sh """#!/bin/sh 
-                          ${dockerHome}/bin/docker build . --no-cache --network=host -t zerodiff/karrots-example-python:${env.BUILD_ID}
-                          ${dockerHome}/bin/docker push ${env.CONTAINER_REPO}
-                        """
+                        docker.withRegistry("https://${env.CONTAINER_REGISTRY}", "${env.CONTAINER_REGISTRY_CREDENTIAL_ID}") {
+                            def dockerImage = docker.build("${env.CONTAINER_REGISTRY}:${env.BUILD_ID}")
+                            dockerImage.push()
+                        }
                     }
                 }
             }
@@ -65,8 +67,7 @@ pipeline {
         failure {
             script {
                 msg = "Build error for ${env.JOB_NAME} ${env.BUILD_NUMBER} (${env.BUILD_URL})"
-
-//        slackSend message: msg, channel: env.SLACK_CHANNEL
+                //slackSend message: msg, channel: env.SLACK_CHANNEL
             }
         }
     }
