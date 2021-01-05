@@ -1,1 +1,3 @@
 /.project
+/runner/
+/.pytest_cache/

@@ -51,12 +51,18 @@ pipeline {
             tools {
                 dockerTool 'docker'
             }
+            environment {
+                PASSWORD = ""
+            }
             steps {
-                container('python') {
+                container('aws-cli') {
                     script {
-                        docker.withRegistry("https://${env.CONTAINER_REGISTRY}", "${env.CONTAINER_REGISTRY_CREDENTIAL_ID}") {
-                            def dockerImage = docker.build("${env.CONTAINER_REGISTRY}:${env.BUILD_ID}")
-                            dockerImage.push()
+                        withEnv(["PASSWORD=`aws ecr get-login-password --region us-west-1`"]) {
+                            sh """#!/bin/bash
+                            docker login --username AWS --password $env.PASSWORD 678685898948.dkr.ecr.us-west-1.amazonaws.com
+                            docker build -t "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" .
+                            docker push "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}"
+                            """
                         }
                     }
                 }
