@@ -2,10 +2,10 @@
   <configuration default="false" name="Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
     <deployment type="dockerfile">
       <settings>
-        <option name="imageTag" value="karrots-python-helloworld" />
+        <option name="imageTag" value="karrots-example-python" />
         <option name="buildCliOptions" value="" />
         <option name="command" value="" />
-        <option name="containerName" value="karrots-python-helloworld" />
+        <option name="containerName" value="karrots-example-python" />
         <option name="entrypoint" value="" />
         <option name="commandLineOptions" value="-p 5000:5000" />
         <option name="sourceFilePath" value="Dockerfile" />

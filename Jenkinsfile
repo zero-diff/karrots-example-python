@@ -60,7 +60,7 @@ pipeline {
                         withEnv(["PASSWORD=`aws ecr get-login-password --region us-west-1`"]) {
                             sh """#!/bin/bash
                             docker login --username AWS --password $env.PASSWORD 678685898948.dkr.ecr.us-west-1.amazonaws.com
-                            docker build -t "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" .
+                            docker build --network=host -t "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" .
                             docker push "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}"
                             """
                         }
