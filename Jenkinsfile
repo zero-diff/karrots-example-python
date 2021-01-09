@@ -69,6 +69,7 @@ pipeline {
             environment {
                 PASSWORD = ""
             }
+            def String[] refParsed = new String[3]
             steps {
                 container('aws-cli') {
                     script {
@@ -82,9 +83,9 @@ pipeline {
                                 if [ ! -z "$ref" ]
                                 then
                                     array = ("")
-                                    IFS='/' read -r -a array <<< "${ref}"
-                                    docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${array[2]}"
-                                    docker push "${env.CONTAINER_REGISTRY}:${array[2]}"
+                                    IFS='/' read -r -a refParsed <<< "${ref}"
+                                    docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${refParsed[2]}"
+                                    docker push "${env.CONTAINER_REGISTRY}:${refParsed[2]}"
                                 fi
                                 """
                             }
