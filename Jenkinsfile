@@ -88,6 +88,7 @@ pipeline {
                                 """
                             }
                             catch(Exception e) {
+                                println("Exception: ${e}")
                             }
                         }
                     }
