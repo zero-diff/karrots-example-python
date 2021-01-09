@@ -1,3 +1,5 @@
+def String[] refParsed = new String[3]
+
 pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -69,7 +71,6 @@ pipeline {
             environment {
                 PASSWORD = ""
             }
-            def String[] refParsed = new String[3]
             steps {
                 container('aws-cli') {
                     script {
