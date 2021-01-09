@@ -73,16 +73,21 @@ pipeline {
                 container('aws-cli') {
                     script {
                         withEnv(["PASSWORD=`aws ecr get-login-password --region us-west-1`"]) {
-                            sh """#!/bin/bash
-                            docker login --username AWS --password $env.PASSWORD 678685898948.dkr.ecr.us-west-1.amazonaws.com
-                            docker build --network=host -t "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" .
-                            docker push "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}"
-                            if [ -z "$ref" ]
-                            then
-                            docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${$ref}"
-                            docker push "${env.CONTAINER_REGISTRY}:${$ref}"
-                            fi
-                            """
+                            try {
+                                sh """#!/bin/bash
+                                docker login --username AWS --password $env.PASSWORD ${env.CONTAINER_REGISTRY}
+                                docker build --network=host -t "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" .
+                                docker push "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}"
+    
+                                if [ ! -z "$ref" ]
+                                then
+                                    docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${ref}"
+                                    docker push "${env.CONTAINER_REGISTRY}:${ref}"
+                                fi
+                                """
+                            }
+                            catch(Exception e) {
+                            }
                         }
                     }
                 }
