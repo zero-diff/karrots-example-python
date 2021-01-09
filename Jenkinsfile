@@ -81,8 +81,9 @@ pipeline {
     
                                 if [ ! -z "$ref" ]
                                 then
-                                    docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${ref}"
-                                    docker push "${env.CONTAINER_REGISTRY}:${ref}"
+                                    IFS='/' read -r -a array <<< "${ref}"
+                                    docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${array[2]}"
+                                    docker push "${env.CONTAINER_REGISTRY}:${array[2]}"
                                 fi
                                 """
                             }
