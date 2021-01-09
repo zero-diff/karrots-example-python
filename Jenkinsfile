@@ -9,7 +9,7 @@ pipeline {
     }
     triggers {
         GenericTrigger(
-                regexpFilterExpression: 'refs/tags/' + TAG_NAME,
+                regexpFilterExpression: 'refs/tags/*',
                 genericVariables: [
                         [key: 'ref', value: '$.ref']
                 ],
