@@ -83,7 +83,8 @@ pipeline {
     
                                 if [ ! -z "$ref" ]
                                 then
-                                    IFS='/' read -r -a refParsed <<< "${ref}"
+                                    # IFS='/' read -r -a refParsed <<< "${ref}"
+                                    refParsed="\$(echo '$ref' | cut -d'/' -f3)"
                                     echo "Ref: ${ref}"
                                     echo "Parsed: " $refParsed[@]
                                     docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${refParsed[2]}"
