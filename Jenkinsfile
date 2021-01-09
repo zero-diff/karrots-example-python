@@ -7,6 +7,21 @@ pipeline {
     agent {
         label 'karrots'
     }
+    triggers {
+        GenericTrigger(
+                regexpFilterExpression: 'refs/tags/' + TAG_NAME,
+                genericVariables: [
+                        [key: 'ref', value: '$.ref']
+                ],
+                causeString: 'Triggered on $ref',
+                token: '123456',
+                tokenCredentialId: '',
+                printContributedVariables: true,
+                printPostContent: true,
+                silentResponse: false,
+                regexpFilterText: '$ref',
+        )
+    }
     stages {
         stage('Checkout') {
             steps {
