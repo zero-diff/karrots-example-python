@@ -76,6 +76,9 @@ pipeline {
                     script {
                         withEnv(["PASSWORD=`aws ecr get-login-password --region us-west-1`"]) {
                             try {
+                                script {
+                                    tag="\$(echo ${ref} | cut -d'/' -f3)"
+                                }
                                 sh """#!/bin/bash
                                 docker login --username AWS --password $env.PASSWORD ${env.CONTAINER_REGISTRY}
                                 docker build --network=host -t "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" .
@@ -83,12 +86,8 @@ pipeline {
     
                                 if [ ! -z "$ref" ]
                                 then
-                                    # IFS='/' read -r -a refParsed <<< "${ref}"
-                                    refParsed="\$(echo '$ref' | cut -d'/' -f3)"
-                                    echo "Ref: ${ref}"
-                                    echo "Parsed: " $refParsed[@]
-                                    docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${refParsed[2]}"
-                                    docker push "${env.CONTAINER_REGISTRY}:${refParsed[2]}"
+                                    docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${tag}"
+                                    docker push "${env.CONTAINER_REGISTRY}:${tag}"
                                 fi
                                 """
                             }
