@@ -10,16 +10,16 @@ pipeline {
     triggers {
         GenericTrigger(
                 regexpFilterExpression: 'refs/tags/*',
+                regexpFilterText: '$ref',
                 genericVariables: [
                         [key: 'ref', value: '$.ref']
                 ],
-                causeString: 'Triggered on $ref',
+                causeString: 'Triggered on tag: $ref',
                 token: '123456',
                 tokenCredentialId: '',
                 printContributedVariables: true,
                 printPostContent: true,
                 silentResponse: false,
-                regexpFilterText: '$ref',
         )
     }
     stages {
@@ -62,7 +62,7 @@ pipeline {
                 }
             }
         }
-        stage('Docker Build') {
+        stage('Docker Build and Push') {
             tools {
                 dockerTool 'docker'
             }
@@ -77,6 +77,11 @@ pipeline {
                             docker login --username AWS --password $env.PASSWORD 678685898948.dkr.ecr.us-west-1.amazonaws.com
                             docker build --network=host -t "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" .
                             docker push "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}"
+                            if [ -z "$ref" ]
+                            then
+                            docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${$ref}"
+                            docker push "${env.CONTAINER_REGISTRY}:${$ref}"
+                            fi
                             """
                         }
                     }
