@@ -47,7 +47,7 @@ pipeline {
                 container('python') {
                     script {
                         sh """
-                          pylint **/*.py
+                          cd src && pylint **/*.py
                         """
                     }
                 }
