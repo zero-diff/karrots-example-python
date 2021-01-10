@@ -58,7 +58,7 @@ pipeline {
                 container('python') {
                     script {
                         sh """
-                          python -m unittest discover -s tests/unit
+                          cd src && python -m unittest discover -s ../tests/unit
                         """
                     }
                 }
