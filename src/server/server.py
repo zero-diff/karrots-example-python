@@ -9,14 +9,16 @@ from flask import jsonify, render_template, Flask, Blueprint
 
 logger = logging.getLogger(__name__)
 
-service = Flask(__name__)
-blue_print = Blueprint('python', __name__, template_folder='templates')
 URL_PREFIX = '/python'
+service = Flask(__name__)
+blue_print = Blueprint('root', __name__, template_folder='templates', static_folder='static',
+                       url_prefix=URL_PREFIX)
+
 
 def setup_server():
     """ service initialization """
     logger.debug("setup complete")
-    service.register_blueprint(blue_print, url_prefix=URL_PREFIX)
+    service.register_blueprint(blue_print)
     return service
 
 
