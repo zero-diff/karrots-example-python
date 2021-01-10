@@ -1,4 +1,5 @@
-Flask==1.1.2
 APScheduler~=3.6.3
-requests
+Blueprint
+Flask==1.1.2
 pytest
+requests

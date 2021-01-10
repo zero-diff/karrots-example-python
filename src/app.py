@@ -13,10 +13,12 @@ from background import background
 
 service = server.setup_server()
 
+
 def setup_app():
     """ setup the application """
     logging.config.fileConfig('logging_config.ini')
     background.setup_background()
+
 
 if __name__ == "__main__":
     setup_app()

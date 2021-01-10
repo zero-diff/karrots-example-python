@@ -2,7 +2,7 @@
 import logging
 import unittest
 
-import server.server as test_server
+from server import server
 
 logger = logging.getLogger(__name__)
 
@@ -10,8 +10,7 @@ class ServerTestCase(unittest.TestCase):
     """ Flask server testing """
 
     def setUp(self):
-        service = test_server.service
-        self.client = service.test_client()
+        self.client = server.setup_server().test_client()
 
     def tearDown(self):
         pass
@@ -25,7 +24,7 @@ class ServerTestCase(unittest.TestCase):
 
     def test_route_root(self):
         """ test route / """
-        res = self.client.get('/')
+        res = self.client.get(server.url_prefix + '/')
         self.assertEqual(200, res.status_code)
         expected = """<!DOCTYPE html>
 <html lang="en">

@@ -5,16 +5,18 @@
 """
 
 import logging
-from flask import jsonify, render_template, Flask
+from flask import jsonify, render_template, Flask, Blueprint
 
 logger = logging.getLogger(__name__)
 
 service = Flask(__name__)
-
+blue_print = Blueprint('python', __name__, template_folder='templates')
+url_prefix = '/python'
 
 def setup_server():
     """ service initialization """
     logger.debug("setup complete")
+    service.register_blueprint(blue_print, url_prefix=url_prefix)
     return service
 
 
@@ -26,7 +28,7 @@ def health_check():
     )
 
 
-@service.route("/")
+@blue_print.route("/")
 def home():
     """ handle root route """
     return render_template('index.html')

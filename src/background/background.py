@@ -34,9 +34,9 @@ def setup_scheduler():
     """ setup background tasks """
     scheduler = BackgroundScheduler(daemon=True)
     # pylint: disable=unnecessary-lambda
-    scheduler.add_job(lambda: background_task1(), 'interval', seconds=5)
+    scheduler.add_job(lambda: background_task1(), 'interval', seconds=60)
     # pylint: disable=unnecessary-lambda
-    scheduler.add_job(lambda: background_task2(), 'interval', seconds=30)
+    scheduler.add_job(lambda: background_task2(), 'interval', seconds=180)
     # pylint: disable=unnecessary-lambda
-    scheduler.add_job(lambda: background_task3(), 'interval', seconds=60)
+    scheduler.add_job(lambda: background_task3(), 'interval', seconds=240)
     scheduler.start()
