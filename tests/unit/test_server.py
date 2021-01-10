@@ -2,7 +2,7 @@
 import logging
 import unittest
 
-import src.server.server as test_server
+import server.server as test_server
 
 logger = logging.getLogger(__name__)
 

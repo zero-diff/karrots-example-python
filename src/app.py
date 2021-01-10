@@ -8,8 +8,8 @@
 
 import logging.config
 
-from src.server import server
-from src.background import background
+from server import server
+from background import background
 
 service = server.setup_server()
 
@@ -20,4 +20,4 @@ def setup_app():
 
 if __name__ == "__main__":
     setup_app()
-    service.run(debug=True, host='0.0.0.0')
+    service.run(debug=True, host='0.0.0.0', port=8080)

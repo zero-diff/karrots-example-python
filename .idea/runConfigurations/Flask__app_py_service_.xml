@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Flask (src/app.py:service)" type="Python.FlaskServer" nameIsGenerated="true">
+  <configuration default="false" name="Flask (app.py:service)" type="Python.FlaskServer" nameIsGenerated="true">
     <option name="application" value="service" />
     <module name="karrots-python-example" />
     <option name="target" value="$PROJECT_DIR$/src/app.py" />
