@@ -1,9 +1,33 @@
-""" route testing """
-def test_route_root(client):
-    """ test route / """
-    res = client.get('/')
-    assert res.status_code == 200
-    expected = """<!DOCTYPE html>
+""" server testing """
+import logging
+import unittest
+
+import src.server.server as test_server
+
+logger = logging.getLogger(__name__)
+
+class ServerTestCase(unittest.TestCase):
+    """ Flask server testing """
+
+    def setUp(self):
+        service = test_server.service
+        self.client = service.test_client()
+
+    def tearDown(self):
+        pass
+
+    def test_route_health(self):
+        """ test route /health """
+        res = self.client.get('/health')
+        self.assertEqual(200, res.status_code)
+        expected = """{"status":"UP"}\n"""
+        self.assertEqual(expected, res.get_data(as_text=True))
+
+    def test_route_root(self):
+        """ test route / """
+        res = self.client.get('/')
+        self.assertEqual(200, res.status_code)
+        expected = """<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -21,4 +45,7 @@ def test_route_root(client):
 <script src="/static/main.js"></script>
 </body>
 </html>"""
-    assert expected == res.get_data(as_text=True)
+        self.assertEqual(expected, res.get_data(as_text=True))
+
+if __name__ == "__main__":
+    unittest.main()

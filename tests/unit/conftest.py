@@ -2,7 +2,7 @@
 import pytest
 
 # pylint: disable=import-error
-from src.server import service as flask_app
+from src.server import server as flask_app
 
 
 @pytest.fixture
