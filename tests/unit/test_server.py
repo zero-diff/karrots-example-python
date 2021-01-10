@@ -24,7 +24,7 @@ class ServerTestCase(unittest.TestCase):
 
     def test_route_root(self):
         """ test route / """
-        res = self.client.get(server.url_prefix + '/')
+        res = self.client.get(server.URL_PREFIX + '/')
         self.assertEqual(200, res.status_code)
         expected = """<!DOCTYPE html>
 <html lang="en">

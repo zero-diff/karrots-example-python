@@ -11,12 +11,12 @@ logger = logging.getLogger(__name__)
 
 service = Flask(__name__)
 blue_print = Blueprint('python', __name__, template_folder='templates')
-url_prefix = '/python'
+URL_PREFIX = '/python'
 
 def setup_server():
     """ service initialization """
     logger.debug("setup complete")
-    service.register_blueprint(blue_print, url_prefix=url_prefix)
+    service.register_blueprint(blue_print, url_prefix=URL_PREFIX)
     return service
 
 
