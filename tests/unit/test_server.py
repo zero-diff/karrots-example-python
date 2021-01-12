@@ -39,7 +39,8 @@ class ServerTestCase(unittest.TestCase):
 </head>
 <body>
 <h1>Karrots Hello World</h1>
-<h4>(An example Python/Flask server with an event loop)</h4>
+<h4>An example Python/Flask server with an event loop</h4>
+<h4>(version 0.1.7)</h4>
 <div class="logo" id="logo" ></div>
 <script src="/python/static/main.js"></script>
 </body>
