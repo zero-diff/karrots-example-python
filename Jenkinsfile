@@ -1,4 +1,6 @@
 def String[] refParsed = new String[3]
+def String ref = "";
+def String tag = "";
 
 pipeline {
     options {
