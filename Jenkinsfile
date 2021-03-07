@@ -1,8 +1,7 @@
 def String[] refParsed = new String[3]
-def String ref = "";
-def String tag = "";
 
 pipeline {
+    parameters { string(name: 'ref', defaultValue: '', description: 'Used to automatically tag built docker images based on git tag. Leave blank for manual builds.') }
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         timestamps()
@@ -16,7 +15,7 @@ pipeline {
                 regexpFilterExpression: 'refs/tags/*',
                 regexpFilterText: '$ref',
                 genericVariables: [
-                        [key: 'ref', value: '$.ref']
+                        [key: 'ref', value: '$.ref', defaultValue: '']
                 ],
                 causeString: 'Triggered on tag: $ref',
                 token: '123456',
@@ -79,14 +78,14 @@ pipeline {
                         withEnv(["PASSWORD=`aws ecr get-login-password --region us-west-1`"]) {
                             try {
                                 script {
-                                    tag="\$(echo ${ref} | cut -d'/' -f3)"
+                                    tag="\$(echo ${params.ref} | cut -d'/' -f3)"
                                 }
                                 sh """#!/bin/bash
                                 docker login --username AWS --password $env.PASSWORD ${env.CONTAINER_REGISTRY}
                                 docker build --network=host -t "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" .
                                 docker push "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}"
-    
-                                if [ ! -z "$ref" ]
+
+                                if [ ! -z "${params.ref}" ]
                                 then
                                     docker tag "${env.CONTAINER_REGISTRY}:${env.BUILD_ID}" "${env.CONTAINER_REGISTRY}:${tag}"
                                     docker push "${env.CONTAINER_REGISTRY}:${tag}"
